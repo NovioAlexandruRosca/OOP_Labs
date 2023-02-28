@@ -3,7 +3,13 @@
 
 void Student::Set_Name(char x[30]) {
 
-	strcpy(this->student_name,x);
+	int i = 0;
+	while (x[i] != '\0')
+	{
+		this->student_name[i] = x[i];
+		i++;
+	}
+	this->student_name[i] = '\0';
 
 }
 
