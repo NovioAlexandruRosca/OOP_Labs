@@ -117,21 +117,10 @@ public:
 	T& operator[] (int index) // arunca exceptie daca index este out of range
 	{
 
-		try
-		{
+		if (index < 0 || index >= Size)
+			throw out_of_range("Index out of range");
 
-			if (index < 0 || index >= Size)
-				throw out_of_range("Index out of range");
-
-			return *List[index];
-		}
-		catch(out_of_range& e)
-		{
-			cout << "Exceptie: " << e.what() << endl;
-			static T defaultV;
-			return defaultV;
-		}
-
+		return (T&)(List[index]);
 	}
 
 	const Array<T>& operator+=(const T& newElem)
@@ -157,43 +146,34 @@ public:
 
 	const Array<T>& Insert(int index, const T& newElem) // adauga un element pe pozitia index, retureaza this. Daca index e invalid arunca o exceptie
 	{
-		try
-		{
-			if (index < 0 || index > Size)
-				throw out_of_range("Invalid index");
 
-			if (index == Size)
+		if (index < 0 || index > Size)
+			throw out_of_range("Invalid index");
+
+		if (index == Size)
+		{
+			if (Size == Capacity)
 			{
-				if (Size == Capacity)
-				{
-					T** auxiliar = new T * [Capacity + 1];
+				T** auxiliar = new T * [Capacity + 1];
 
-					for (int i = 0; i < Capacity; i++)
-						auxiliar[i] = List[i];
+				for (int i = 0; i < Capacity; i++)
+					auxiliar[i] = List[i];
 
-					delete[] List;
+				delete[] List;
 
-					List = auxiliar;
-					Capacity++;
-				}
-				Size++;
+				List = auxiliar;
+				Capacity++;
 			}
-
-			List[index] = const_cast<T*>(&newElem);
-
+			Size++;
 		}
-		catch (out_of_range& e)
-		{
-			cout << "Exceptie: " << e.what() << endl;
-		}
+
+		List[index] = const_cast<T*>(&newElem);
 
 		return *this;
 	}
 
 	const Array<T>& Insert(int index, const Array<T> otherArray) // adauga o lista pe pozitia index, retureaza this. Daca index e invalid arunca o exceptie
 	{
-		try
-		{
 			if (index < 0 || index > Size)
 				throw out_of_range("Invalid index");
 
@@ -219,12 +199,6 @@ public:
 
 				List[index + i] = otherArray.List[i];
 			}
-
-		}
-		catch (out_of_range& e)
-		{
-			cout << "Exceptie: " << e.what() << endl;
-		}
 
 		return *this;
 	}
@@ -302,13 +276,13 @@ public:
 
 	void Sort(Compare* comparator)
 	{
-		int size = List.Size;
+		int size = this.Size;
 
 		for (int i = 0; i < size - 1; ++i)
 		{
 			for (int j = 0; j < size - i - 1; ++j)
 			{
-				if (comparator->CompareElements(&data[j], &data[j + 1]))
+				if (comparator->CompareElements(&List[i], &List[j]) > 0)
 				{
 					T* aux = List[i];
 					List[i] = List[j];
@@ -323,7 +297,7 @@ public:
 	{
 
 		int l = 0;
-		int r = List.Size - 1;
+		int r = this.Size - 1;
 
 		while (l <= r)
 		{
@@ -344,12 +318,12 @@ public:
 	int BinarySearch(const T& elem, int(*compare)(const T&, const T&))
 	{
 		int left = 0;
-		int right = List.Size - 1;
+		int right = this.Size - 1;
 
 		while (left <= right)
 		{
 			int mid = left + (right - left) / 2;
-			int comparison = compare(*List[mid], elem);
+			int comparison = compare(List[mid], elem);
 
 			if (comparison == 0)
 				return mid;
@@ -365,12 +339,12 @@ public:
 	int BinarySearch(const T& elem, Compare* comparator)
 	{
 		int left = 0;
-		int right = List.Size - 1;
+		int right = this.Size - 1;
 
 		while (left <= right)
 		{
 			int mid = left + (right - left) / 2;
-			int comparison = comparator->CompareElements(*List[mid], elem);
+			int comparison = comparator->CompareElements(&List[mid], elem);
 
 			if (comparison == 0)
 				return mid;
@@ -395,11 +369,11 @@ public:
 
 	int Find(const T& elem, int(*compare)(const T&, const T&))
 	{
-		int size = List.Size;
+		int size = this.Size;
 
 		for (int i = 0; i < size; ++i)
 		{
-			if (compare(*List[i], elem) == 0)
+			if (compare(List[i], elem) == 0)
 			{
 				return i;
 			}
@@ -409,11 +383,11 @@ public:
 
 	int Find(const T& elem, Compare* comparator)
 	{
-		int size = List.Size;
+		int size = this.Size;
 
 		for (int i = 0; i < size; ++i)
 		{
-			if (comparator->CompareElements(*List[i], &elem) == 0)
+			if (comparator->CompareElements(&List[i], &elem) == 0)
 			{
 				return i;
 			}
