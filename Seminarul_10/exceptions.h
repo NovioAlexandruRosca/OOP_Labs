@@ -96,7 +96,7 @@ public:
 
 	~Array()
 	{
-		delete[] List;
+			delete[] List;
 	}
 
 	Array(int capacity)
@@ -209,21 +209,14 @@ public:
 			if (index < 0 || index >= Size)
 				throw out_of_range("Invalid index");
 
+			delete List[index];
 
 			for (int i = index; i < Size - 1; i++)
 				List[i] = List[i + 1];
 
 			Size--;
 
-			
-			T** auxiliar = new T * [Capacity];
-
-			for (int i = 0; i < Size; i++)
-				auxiliar[i] = List[i];
-
-			delete[] List;
-
-			List = auxiliar;
+			List[Size] = nullptr;
 
 		}
 		catch (out_of_range& e)
@@ -277,9 +270,9 @@ public:
 	{
 		int size = this.Size;
 
-		for (int i = 0; i < size - 1; ++i)
+		for (int i = 0; i < size - 1; i++)
 		{
-			for (int j = 0; j < size - i - 1; ++j)
+			for (int j = 0; j < size - i - 1; j++)
 			{
 				if (comparator->CompareElements(&List[i], &List[j]) > 0)
 				{
