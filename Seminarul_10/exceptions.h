@@ -113,14 +113,13 @@ public:
 		Size = otherArray.Size;
 	}
 
-
 	T& operator[] (int index) // arunca exceptie daca index este out of range
 	{
 
 		if (index < 0 || index >= Size)
 			throw out_of_range("Index out of range");
 
-		return (T&)(List[index]);
+		return *(List[index]);
 	}
 
 	const Array<T>& operator+=(const T& newElem)
