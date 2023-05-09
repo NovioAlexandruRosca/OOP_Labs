@@ -60,7 +60,7 @@ public:
 		return *this;
 	}
 
-	bool operator= (ArrayIterator<T>& other)
+	bool operator== (ArrayIterator<T>& other)
 	{
 		return Current == other.Current;
 	}
@@ -155,7 +155,7 @@ public:
 			{
 				T** auxiliar = new T * [Capacity + 1];
 
-				for (int i = 0; i < Capacity; i++)
+				for (int i = 0; i < Size; i++)
 					auxiliar[i] = List[i];
 
 				delete[] List;
@@ -185,7 +185,7 @@ public:
 					{
 						T** auxiliar = new T * [Capacity + 1];
 
-						for (int i = 0; i < Capacity; i++)
+						for (int i = 0; i < Size; i++)
 							auxiliar[i] = List[i];
 
 						delete[] List;
