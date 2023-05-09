@@ -35,7 +35,7 @@ class ArrayIterator
 
 private:
 
-	T* ptr;
+	T** ptr;
 	int Current;
 
 public:
@@ -242,13 +242,15 @@ public:
 
 			Size--;
 
-			Array<T> otherArray(this);
+			
+			T** auxiliar = new T * [Capacity];
+
+			for (int i = 0; i < Size; i++)
+				auxiliar[i] = List[i];
 
 			delete[] List;
 
-			List = otherArray.List;
-			Capacity = otherArray.Capacity;
-			Size = otherArray.Size;
+			List = auxiliar;
 
 		}
 		catch (out_of_range& e)
@@ -320,19 +322,20 @@ public:
 	int BinarySearch(const T& elem)
 	{
 
-		int left = 0;
-		int right = List.Size - 1;
+		int l = 0;
+		int r = List.Size - 1;
 
-		while (left <= right)
+		while (l <= r)
 		{
-			int mid = left + (right - left) / 2;
+			int mid = l + (r - l) / 2;
 
 			if (*List[mid] == elem)
 				return mid;
+
 			else if (*List[mid] < elem)
-				left = mid + 1;
+				l = mid + 1;
 			else
-				right = mid - 1;
+				r = mid - 1;
 		}
 
 		return -1;
