@@ -35,7 +35,7 @@ class ArrayIterator
 
 private:
 
-	T** ptr;
+	T* ptr;
 	int Current;
 
 public:
@@ -43,7 +43,10 @@ public:
 	ArrayIterator()
 	{
 		Current = 0;
+		ptr = nullptr;
 	}
+
+	ArrayIterator(const int index) : Current(index), ptr(nullptr) {}
 
 	ArrayIterator& operator++ ()
 	{
@@ -426,11 +429,11 @@ public:
 
 	ArrayIterator<T> GetBeginIterator()
 	{
-		return *List[0];
+		return ArrayIterator<T>(0);
 	}
 	ArrayIterator<T> GetEndIterator()
 	{
-		return *List[List.Size - 1];
+		return ArrayIterator<T>(Size);
 	}
 
 };
